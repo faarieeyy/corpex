@@ -1,184 +1,212 @@
 "use client";
 
-import { ArrowRight, Phone, Mail, MessageSquare } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import { MessageSquare, Phone, Mail, ArrowRight, CheckCircle2 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-export default function Contact() {
-  const heroRef = useRef<HTMLHeadingElement>(null);
-  const blocksRef = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+gsap.registerPlugin(ScrollTrigger);
+
+export default function ContactPage() {
+  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    business: "",
+    message: ""
+  });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    let ctx = gsap.context(() => {
+      // Hero reveal
+      gsap.from(".contact-hero", {
+        y: 40,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.15,
+        ease: "power3.out",
+        delay: 0.1
+      });
+
+      // Contact options and form stagger
+      gsap.from(".contact-item", {
+        scrollTrigger: {
+          trigger: ".contact-grid",
+          start: "top 80%",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power3.out"
+      });
+    }, containerRef);
     
-    const ctx = gsap.context(() => {
-      // Hero
-      if (heroRef.current) {
-        gsap.fromTo(heroRef.current,
-          { y: 50, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.2 }
-        );
-      }
-
-      // Contact Blocks
-      if (blocksRef.current) {
-        const blocks = gsap.utils.toArray(".contact-block");
-        gsap.fromTo(blocks,
-          { y: 50, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: blocksRef.current,
-              start: "top 85%",
-            }
-          }
-        );
-      }
-
-      // Form Elements
-      if (formRef.current) {
-        const inputs = gsap.utils.toArray(".form-animate");
-        gsap.fromTo(inputs,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: formRef.current,
-              start: "top 85%",
-            }
-          }
-        );
-      }
-    });
-
     return () => ctx.revert();
   }, []);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (formData.name && formData.message) {
+      setSubmitted(true);
+    }
+  };
+
   return (
-    <div className="pt-32 pb-20 bg-corpex-black text-corpex-white min-h-screen">
+    <main ref={containerRef} className="bg-corpex-black text-corpex-white min-h-screen font-sans pt-32 selection:bg-corpex-gold selection:text-corpex-black">
       
-      {/* Header */}
-      <section className="container mx-auto px-6 md:px-12 pt-20 pb-24 overflow-hidden">
-        <div className="w-4 h-4 bg-corpex-gold rotate-45 mb-8"></div>
-        <h1 ref={heroRef} className="text-[var(--text-hero)] font-bold tracking-tight leading-[1.1] mb-8">
-          Let&apos;s Talk.
-        </h1>
-        <p className="text-[var(--text-sub)] font-serif text-corpex-white/80 max-w-3xl leading-relaxed">
-          Tell us what&apos;s slowing your business down.<br/>
-          <span className="text-corpex-white/50">We&apos;ll tell you what we can do about it.</span>
-        </p>
-      </section>
-
-      {/* Contact Methods */}
-      <section className="container mx-auto px-6 md:px-12 mb-32">
-        <div ref={blocksRef} className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
-          <a href="#" className="contact-block group bg-white/5 border border-white/10 p-12 hover:bg-corpex-blue transition-colors duration-500 relative overflow-hidden">
-            <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center mb-12 group-hover:bg-white group-hover:text-corpex-blue transition-colors">
-              <MessageSquare className="w-5 h-5" />
-            </div>
-            <h3 className="text-3xl font-bold mb-4">WhatsApp</h3>
-            <p className="font-serif text-white/50 group-hover:text-white/80 mb-12">Direct message for immediate response.</p>
-            <div className="absolute bottom-12 right-12 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-              <ArrowRight className="w-6 h-6 text-corpex-gold" />
-            </div>
-          </a>
-
-          <a href="#" className="contact-block group bg-white/5 border border-white/10 p-12 hover:bg-corpex-blue transition-colors duration-500 relative overflow-hidden">
-            <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center mb-12 group-hover:bg-white group-hover:text-corpex-blue transition-colors">
-              <Phone className="w-5 h-5" />
-            </div>
-            <h3 className="text-3xl font-bold mb-4">Call</h3>
-            <p className="font-serif text-white/50 group-hover:text-white/80 mb-12">+971 50 123 4567</p>
-            <div className="absolute bottom-12 right-12 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-              <ArrowRight className="w-6 h-6 text-corpex-gold" />
-            </div>
-          </a>
-
-          <a href="#" className="contact-block group bg-white/5 border border-white/10 p-12 hover:bg-corpex-blue transition-colors duration-500 relative overflow-hidden">
-            <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center mb-12 group-hover:bg-white group-hover:text-corpex-blue transition-colors">
-              <Mail className="w-5 h-5" />
-            </div>
-            <h3 className="text-3xl font-bold mb-4">Email</h3>
-            <p className="font-serif text-white/50 group-hover:text-white/80 mb-12">hello@corpex.ae</p>
-            <div className="absolute bottom-12 right-12 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-              <ArrowRight className="w-6 h-6 text-corpex-gold" />
-            </div>
-          </a>
-
+      {/* INTRO HEADER */}
+      <section className="py-24 px-6 md:px-12 relative overflow-hidden">
+        {/* Subtle Grid Background */}
+        <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '4rem 4rem' }}></div>
+        
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <span className="contact-hero text-xs font-bold uppercase tracking-[0.3em] text-corpex-gold block mb-6">CONTACT US</span>
+          <h1 className="contact-hero text-6xl md:text-9xl font-bold tracking-tighter uppercase leading-[0.85] text-white mb-8">
+            Let&apos;s <span className="text-corpex-gold italic font-serif lowercase tracking-normal text-6xl md:text-9xl">Talk.</span>
+          </h1>
+          <p className="contact-hero text-xl md:text-3xl font-serif text-white/80 max-w-2xl leading-relaxed">
+            Tell us what&apos;s slowing your business down. We&apos;ll tell you what we can do about it.
+          </p>
         </div>
       </section>
 
-      {/* Minimal Form */}
-      <section className="container mx-auto px-6 md:px-12">
-        <div className="max-w-4xl border-t border-white/20 pt-24">
-           <h2 className="text-sm font-bold uppercase tracking-widest text-corpex-white/40 mb-12">
-            Send a Message
-          </h2>
-
-          <form ref={formRef} className="space-y-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div className="relative group form-animate">
-                <input 
-                  type="text" 
-                  id="name" 
-                  required
-                  className="w-full bg-transparent border-b border-white/30 py-4 focus:outline-none focus:border-corpex-gold text-lg transition-colors peer"
-                  placeholder=" "
-                />
-                <label htmlFor="name" className="absolute left-0 top-4 text-white/50 text-lg transition-all peer-focus:-top-6 peer-focus:text-xs peer-focus:text-corpex-gold peer-valid:-top-6 peer-valid:text-xs">
-                  Name
-                </label>
-              </div>
-              <div className="relative group form-animate">
-                <input 
-                  type="text" 
-                  id="business" 
-                  required
-                  className="w-full bg-transparent border-b border-white/30 py-4 focus:outline-none focus:border-corpex-gold text-lg transition-colors peer"
-                  placeholder=" "
-                />
-                <label htmlFor="business" className="absolute left-0 top-4 text-white/50 text-lg transition-all peer-focus:-top-6 peer-focus:text-xs peer-focus:text-corpex-gold peer-valid:-top-6 peer-valid:text-xs">
-                  Business
-                </label>
-              </div>
-            </div>
+      {/* DIRECT CONTACT METHODS & FORM */}
+      <section className="pb-32 px-6 md:px-12">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 contact-grid">
             
-            <div className="relative group form-animate">
-              <textarea 
-                id="message" 
-                required
-                rows={4}
-                className="w-full bg-transparent border-b border-white/30 py-4 focus:outline-none focus:border-corpex-gold text-lg transition-colors peer resize-none"
-                placeholder=" "
-              ></textarea>
-              <label htmlFor="message" className="absolute left-0 top-4 text-white/50 text-lg transition-all peer-focus:-top-6 peer-focus:text-xs peer-focus:text-corpex-gold peer-valid:-top-6 peer-valid:text-xs">
-                Message
-              </label>
-            </div>
-            <div className="form-animate">
-              <button 
-                type="submit"
-                className="group relative inline-flex items-center space-x-4 bg-white text-corpex-black rounded-full px-8 py-4 overflow-hidden hover:bg-corpex-gold transition-colors duration-300"
+            {/* Direct Contact Buttons */}
+            <div className="lg:col-span-5 space-y-6">
+              <h2 className="contact-item text-xs font-bold uppercase tracking-[0.2em] text-corpex-gold mb-6">
+                Direct Contact
+              </h2>
+
+              <a 
+                href="https://wa.me/971501234567" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="contact-item group flex items-center justify-between p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-corpex-gold hover:bg-corpex-gold hover:text-corpex-black transition-all duration-300"
               >
-                <span className="font-bold text-sm uppercase tracking-widest relative z-10">Send Message</span>
-                <ArrowRight className="w-4 h-4 relative z-10" />
-              </button>
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 rounded-full bg-corpex-gold text-corpex-black flex items-center justify-center group-hover:bg-corpex-black group-hover:text-corpex-gold transition-colors">
+                    <MessageSquare className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-lg">WhatsApp Us</div>
+                    <div className="text-xs opacity-70">Instant Response</div>
+                  </div>
+                </div>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+              </a>
+
+              <a 
+                href="tel:+971501234567"
+                className="contact-item group flex items-center justify-between p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-corpex-gold hover:bg-corpex-gold hover:text-corpex-black transition-all duration-300"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 rounded-full bg-corpex-gold text-corpex-black flex items-center justify-center group-hover:bg-corpex-black group-hover:text-corpex-gold transition-colors">
+                    <Phone className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-lg">Call Directly</div>
+                    <div className="text-xs opacity-70">Speak with an advisor</div>
+                  </div>
+                </div>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+              </a>
+
+              <a 
+                href="mailto:info@corpexconsulting.com"
+                className="contact-item group flex items-center justify-between p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-corpex-gold hover:bg-corpex-gold hover:text-corpex-black transition-all duration-300"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 rounded-full bg-corpex-gold text-corpex-black flex items-center justify-center group-hover:bg-corpex-black group-hover:text-corpex-gold transition-colors">
+                    <Mail className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-lg">Email Us</div>
+                    <div className="text-xs opacity-70">info@corpexconsulting.com</div>
+                  </div>
+                </div>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+              </a>
             </div>
-          </form>
+
+            {/* Minimal Form */}
+            <div className="contact-item lg:col-span-7 bg-white/5 p-10 md:p-14 rounded-[2.5rem] border border-white/10 relative">
+              {submitted ? (
+                <div className="py-16 text-center space-y-6">
+                  <div className="w-16 h-16 bg-corpex-gold text-corpex-black rounded-full flex items-center justify-center mx-auto">
+                    <CheckCircle2 className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-3xl font-bold uppercase tracking-tight">Message Received</h3>
+                  <p className="font-serif text-white/70 max-w-md mx-auto">
+                    Thank you. A Corpex advisor will review your message and reach out directly.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-corpex-gold mb-8">
+                    Send a Message
+                  </h3>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-widest text-white/60 mb-3">
+                      Name *
+                    </label>
+                    <input 
+                      type="text"
+                      required
+                      placeholder="Your Full Name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-white/30 focus:outline-none focus:border-corpex-gold transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-widest text-white/60 mb-3">
+                      Business Name
+                    </label>
+                    <input 
+                      type="text"
+                      placeholder="Company / Business Name"
+                      value={formData.business}
+                      onChange={(e) => setFormData({ ...formData, business: e.target.value })}
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-white/30 focus:outline-none focus:border-corpex-gold transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-widest text-white/60 mb-3">
+                      Message *
+                    </label>
+                    <textarea 
+                      required
+                      rows={5}
+                      placeholder="Tell us what is slowing your business down..."
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-white/30 focus:outline-none focus:border-corpex-gold transition-colors resize-none"
+                    ></textarea>
+                  </div>
+
+                  <button 
+                    type="submit"
+                    className="w-full bg-corpex-gold text-corpex-black font-bold uppercase tracking-widest text-xs py-5 rounded-2xl hover:bg-white transition-colors duration-300 flex items-center justify-center space-x-3 cursor-pointer"
+                  >
+                    <span>Send Message</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
+              )}
+            </div>
+
+          </div>
         </div>
       </section>
 
-    </div>
+    </main>
   );
 }

@@ -9,17 +9,12 @@ export default function Footer() {
           {/* Brand Info */}
           <div className="lg:col-span-1">
             <div className="flex items-baseline text-3xl tracking-tight mb-6">
-              Corp<span className="font-bold">ex</span>
+              Corpex
               <div className="w-2.5 h-2.5 bg-corpex-gold rotate-45 ml-1"></div>
             </div>
             <p className="text-corpex-white/60 text-sm leading-relaxed max-w-sm">
-              Your dedicated growth partner for strategy, compliance, branding, technology, and more. One partner. Every function. One person to call.
+              Your Business Growth Partner. Strategy, compliance, branding, and technology under one trusted partner.
             </p>
-            <div className="flex space-x-6 mt-8 text-sm font-bold tracking-widest text-corpex-white/60">
-              <a href="#" className="hover:text-corpex-white transition-colors">LI</a>
-              <a href="#" className="hover:text-corpex-white transition-colors">IG</a>
-              <a href="#" className="hover:text-corpex-white transition-colors">FB</a>
-            </div>
           </div>
 
           {/* Navigation */}
@@ -39,15 +34,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Services (Abbreviated) */}
+          {/* Services (High-level Groups) */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider mb-6 text-corpex-white/40">Services</h4>
             <ul className="space-y-4 text-sm text-corpex-white/80">
               <li>Setup & Compliance</li>
               <li>Finance & Advisory</li>
               <li>Branding & Creative</li>
-              <li>Technology</li>
-              <li>Corporate Services</li>
+              <li>Website & Technology</li>
+              <li>Corporate, Print & Events</li>
             </ul>
           </div>
 
@@ -57,15 +52,11 @@ export default function Footer() {
              <ul className="space-y-4 text-sm text-corpex-white/80">
               <li className="flex items-center">
                 <span className="w-4 h-px bg-corpex-gold mr-3"></span>
-                +971 50 123 4567
+                <TransitionLink href="/contact" className="hover:text-corpex-gold transition-colors">Start Your Growth Journey</TransitionLink>
               </li>
               <li className="flex items-center">
                 <span className="w-4 h-px bg-corpex-gold mr-3"></span>
-                hello@corpex.ae
-              </li>
-              <li className="flex items-center">
-                <span className="w-4 h-px bg-corpex-gold mr-3"></span>
-                Dubai, UAE
+                <TransitionLink href="/contact" className="hover:text-corpex-gold transition-colors">Let&apos;s Talk</TransitionLink>
               </li>
              </ul>
           </div>
@@ -74,12 +65,11 @@ export default function Footer() {
 
         {/* Oversized Brand Statement */}
         <div className="border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-center">
-          <div className="font-serif text-2xl md:text-4xl font-bold tracking-tight mb-6 md:mb-0">
+          <div className="font-serif text-2xl md:text-3xl font-bold tracking-tight mb-6 md:mb-0">
             YOUR BUSINESS GROWTH PARTNER.
           </div>
-          <div className="flex space-x-6 text-xs text-corpex-white/40">
-            <a href="#" className="hover:text-corpex-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-corpex-white transition-colors">Terms of Use</a>
+          <div className="text-xs text-corpex-white/40">
+            Corpex Consulting
           </div>
         </div>
         <div className="mt-8 text-xs text-corpex-white/30">

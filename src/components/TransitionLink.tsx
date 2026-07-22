@@ -1,8 +1,5 @@
-"use client";
-
 import Link from "next/link";
 import { ReactNode } from "react";
-import { usePageTransition } from "./PageTransitionProvider";
 
 interface TransitionLinkProps {
   href: string;
@@ -13,17 +10,9 @@ interface TransitionLinkProps {
 }
 
 export default function TransitionLink({ href, children, className, style, onClick }: TransitionLinkProps) {
-  const { navigateWithTransition } = usePageTransition();
-
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    if (onClick) onClick();
-    navigateWithTransition(href);
-  };
-
   return (
-    <a href={href} onClick={handleClick} className={className} style={style}>
+    <Link href={href} className={className} style={style} onClick={onClick}>
       {children}
-    </a>
+    </Link>
   );
 }

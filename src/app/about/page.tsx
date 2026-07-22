@@ -1,175 +1,181 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { HandDrawnSquiggle } from "@/components/ElementalAccents";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-export default function About() {
-  const heroRef = useRef<HTMLHeadingElement>(null);
-  const whyRef = useRef<HTMLElement>(null);
-  const whyTextRef = useRef<HTMLDivElement>(null);
-  const believeImgRef = useRef<HTMLDivElement>(null);
+gsap.registerPlugin(ScrollTrigger);
+
+export default function AboutPage() {
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    let ctx = gsap.context(() => {
+      // Hero text reveal
+      gsap.from(".hero-reveal", {
+        y: 40,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.15,
+        ease: "power3.out",
+        delay: 0.2
+      });
 
-    const ctx = gsap.context(() => {
-      // Hero Entrance Animation
-      if (heroRef.current) {
-        gsap.fromTo(heroRef.current,
-          { y: 50, opacity: 0, rotateX: -20 },
-          { y: 0, opacity: 1, rotateX: 0, duration: 1.2, ease: "power4.out", delay: 0.2 }
-        );
-      }
-
-      // Scroll reveal for "Why We Started" text
-      if (whyRef.current && whyTextRef.current) {
-        gsap.fromTo(whyTextRef.current.children, 
-          { y: 50, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: whyRef.current,
-              start: "top 70%",
-            }
-          }
-        );
-      }
-
-      // Parallax for What We Believe image
-      if (believeImgRef.current) {
-        gsap.to(believeImgRef.current, {
-          yPercent: 20,
-          ease: "none",
+      // Scroll reveals
+      const revealElements = gsap.utils.toArray('.scroll-reveal');
+      revealElements.forEach((el: any) => {
+        gsap.from(el, {
           scrollTrigger: {
-            trigger: believeImgRef.current.parentElement,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1
-          }
+            trigger: el,
+            start: "top 85%",
+          },
+          y: 40,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out"
         });
-      }
-    });
+      });
 
+      // Stagger cards
+      gsap.from(".principle-card", {
+        scrollTrigger: {
+          trigger: ".principles-container",
+          start: "top 80%",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.15,
+        ease: "power3.out"
+      });
+    }, containerRef);
+    
     return () => ctx.revert();
   }, []);
 
   return (
-    <div className="pt-32 bg-corpex-white">
+    <main ref={containerRef} className="bg-corpex-white text-corpex-black min-h-screen font-sans pt-32 selection:bg-corpex-gold selection:text-corpex-black">
       
-      {/* Header */}
-      <section className="container mx-auto px-6 md:px-12 pt-20 pb-12 overflow-hidden" style={{ perspective: '1000px' }}>
-        <div className="w-4 h-4 bg-corpex-gold rotate-45 mb-8"></div>
-        <h1 ref={heroRef} className="text-[var(--text-hero)] font-bold tracking-tight leading-[1.1] mb-8 origin-bottom">
-          About Us.
-        </h1>
-      </section>
+      {/* HERO / INTRO SECTION */}
+      <section className="py-24 md:py-32 px-6 md:px-12 bg-corpex-black text-corpex-white relative overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0 z-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2000&auto=format&fit=crop" 
+            alt="Corpex Team Collaboration" 
+            className="w-full h-full object-cover opacity-30"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-corpex-black via-corpex-black/80 to-transparent"></div>
+        </div>
 
-      {/* Why We Started - Editorial Split Screen */}
-      <section ref={whyRef} className="border-t border-corpex-black/10 flex flex-col lg:flex-row min-h-screen">
-        <div className="lg:w-1/2 p-12 md:p-24 flex flex-col justify-center border-r border-corpex-black/10">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-corpex-black/40 mb-16">
-            Why We Started
-          </h2>
-          <div ref={whyTextRef}>
-            <p className="text-2xl md:text-4xl font-serif leading-snug text-corpex-black/60 mb-12">
-              Corpex wasn&apos;t built to be another name on a long list of vendors.
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <span className="hero-reveal text-xs font-bold uppercase tracking-[0.3em] text-corpex-gold block mb-6">ABOUT CORPEX</span>
+          <h1 className="hero-reveal text-5xl md:text-8xl font-bold tracking-tighter uppercase leading-[0.85] text-white mb-12">
+            Why We<br/>
+            <span className="text-corpex-gold italic font-serif lowercase tracking-normal text-6xl md:text-9xl">Started.</span>
+          </h1>
+          <div className="hero-reveal max-w-3xl border-l-2 border-corpex-gold pl-8 md:pl-12 py-2">
+            <p className="text-xl md:text-3xl font-serif text-white/80 leading-relaxed">
+              Corpex wasn&apos;t built to be another name on a long list of vendors. It was built because businesses kept telling us the same thing — too many providers, not enough coordination, and no one who understood the whole picture.
             </p>
-            <p className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1]">
-              It was built because businesses kept telling us the same thing — too many providers, not enough coordination. <span className="text-corpex-blue">So we became the solution.</span>
+            <p className="text-2xl md:text-4xl font-bold text-white mt-8 font-sans uppercase tracking-tight">
+              So we became that person.
             </p>
           </div>
         </div>
-        
-        {/* Massive Architectural Image */}
-        <div className="lg:w-1/2 relative min-h-[60vh] lg:min-h-screen overflow-hidden">
-           <div 
-             className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?q=80&w=1932&auto=format&fit=crop')] bg-cover bg-center"
-             style={{ filter: "grayscale(20%) contrast(1.1)" }}
-           ></div>
+      </section>
+
+      {/* WHAT WE BELIEVE */}
+      <section className="py-32 px-6 md:px-12 bg-corpex-black text-corpex-white relative overflow-hidden">
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <div className="flex flex-col md:flex-row gap-16 items-start">
+            <div className="md:w-1/3 scroll-reveal">
+              <span className="text-xs font-bold uppercase tracking-[0.3em] text-corpex-gold block mb-4">OUR PHILOSOPHY</span>
+              <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase leading-none">
+                What We<br/>Believe<span className="text-corpex-gold">.</span>
+              </h2>
+            </div>
+            <div className="md:w-2/3 scroll-reveal">
+              <h3 className="text-3xl md:text-5xl font-bold tracking-tight mb-8 leading-snug">
+                A business doesn&apos;t need more service providers. It needs one that understands the whole thing — and takes responsibility for it.
+              </h3>
+              <p className="text-xl font-serif text-corpex-gold italic">
+                That&apos;s the only philosophy we operate on.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* What We Believe - Dark Split Screen */}
-      <section className="bg-corpex-black text-corpex-white flex flex-col lg:flex-row-reverse min-h-screen">
-        <div className="lg:w-1/2 p-12 md:p-24 flex flex-col justify-center relative z-10 bg-corpex-black">
-          <div className="text-corpex-gold font-bold tracking-widest text-xs uppercase mb-12 flex items-center">
-            <span className="w-8 h-px bg-corpex-gold mr-4"></span>
-            What We Believe
+      {/* HOW WE THINK */}
+      <section className="py-32 px-6 md:px-12 bg-corpex-white text-corpex-black relative">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-24 relative scroll-reveal">
+            <span className="text-xs font-bold uppercase tracking-[0.3em] text-corpex-gold block mb-4">OUR PRINCIPLES</span>
+            <h2 className="text-4xl md:text-7xl font-bold tracking-tighter uppercase text-corpex-blue relative inline-block">
+              How We Think
+              <HandDrawnSquiggle className="absolute -bottom-8 right-0 text-corpex-gold w-32 h-16" />
+            </h2>
           </div>
-          
-          <h2 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-12">
-            A business doesn&apos;t need more service providers.
-          </h2>
-          <p className="text-2xl md:text-4xl font-serif text-corpex-white/80 max-w-2xl mb-16 italic leading-snug">
-            "It needs one that understands the whole thing — and takes responsibility for it."
-          </p>
-          <div className="text-sm font-bold uppercase tracking-widest text-corpex-white/50">
-            That&apos;s the only philosophy we operate on.
-          </div>
-        </div>
 
-        {/* Parallax Image Window */}
-        <div className="lg:w-1/2 relative min-h-[60vh] lg:min-h-screen overflow-hidden">
-           <div 
-             ref={believeImgRef}
-             className="absolute -top-[20%] -bottom-[20%] w-full bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop')] bg-cover bg-center"
-             style={{ filter: "grayscale(100%) brightness(0.6)" }}
-           ></div>
-           <div className="absolute inset-0 bg-corpex-blue mix-blend-overlay opacity-30"></div>
-        </div>
-      </section>
-
-      {/* How We Think */}
-      <section className="py-24 md:py-32">
-        <div className="container mx-auto px-6 md:px-12">
-          <div className="mb-20">
-            <h2 className="text-[var(--text-section)] font-bold tracking-tight">How We Think</h2>
-          </div>
-          
-          <div className="space-y-0 border-t border-corpex-black/10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 principles-container">
             {[
-              { title: "PARTNERSHIP OVER PROJECTS", desc: "We measure success in years, not invoices." },
-              { title: "STRATEGY BEFORE EXECUTION", desc: "We don't do work until we understand why it matters." },
-              { title: "RESULTS OVER PROMISES", desc: "We'd rather under-say and over-deliver." }
-            ].map((value, i) => (
-              <div key={i} className="group border-b border-corpex-black/10 py-12 md:py-20 flex flex-col md:flex-row md:items-center gap-8 hover:bg-corpex-black hover:text-white transition-all duration-700 cursor-default px-6 -mx-6">
-                <div className="text-corpex-gold font-bold w-12 shrink-0 text-xl">0{i+1}</div>
-                <h3 className="text-4xl md:text-6xl font-bold tracking-tight md:w-1/2 group-hover:text-corpex-gold transition-colors duration-500">
-                  {value.title}
-                </h3>
-                <p className="text-xl md:text-2xl font-serif text-corpex-black/60 group-hover:text-white/80 md:w-1/2 transition-colors duration-500">
-                  {value.desc}
-                </p>
+              {
+                num: "01",
+                title: "PARTNERSHIP OVER PROJECTS.",
+                text: "We measure success in years, not invoices."
+              },
+              {
+                num: "02",
+                title: "STRATEGY BEFORE EXECUTION.",
+                text: "We don't do work until we understand why it matters."
+              },
+              {
+                num: "03",
+                title: "RESULTS OVER PROMISES.",
+                text: "We'd rather under-say and over-deliver."
+              }
+            ].map((item, i) => (
+              <div key={i} className="principle-card bg-[#F8F9FA] p-10 rounded-[2rem] border border-black/5 hover:border-corpex-gold/40 transition-all duration-300 flex flex-col justify-between">
+                <div>
+                  <div className="text-4xl font-bold text-corpex-gold font-serif italic mb-6">
+                    {item.num}
+                  </div>
+                  <h3 className="text-xl font-bold uppercase tracking-tight text-corpex-blue mb-4 leading-snug">
+                    {item.title}
+                  </h3>
+                  <p className="font-serif text-corpex-black/70 leading-relaxed text-lg">
+                    {item.text}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Where We're Headed */}
-      <section className="py-40 bg-corpex-blue text-corpex-white text-center relative overflow-hidden">
-        {/* Abstract Gold Accent */}
-        <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-corpex-gold/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
-        
-        <div className="container mx-auto px-6 md:px-12 max-w-5xl relative z-10">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-corpex-white/50 mb-16">
+      {/* WHERE WE'RE HEADED */}
+      <section className="py-32 px-6 md:px-12 bg-[#F8F9FA] text-corpex-black relative">
+        <div className="container mx-auto max-w-4xl text-center scroll-reveal">
+          <span className="text-xs font-bold uppercase tracking-[0.3em] text-corpex-gold block mb-6">THE VISION</span>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase text-corpex-blue mb-8">
             Where We&apos;re Headed
           </h2>
-          <p className="text-3xl md:text-5xl font-serif leading-snug text-corpex-white/90 mb-20 max-w-4xl mx-auto">
-            We&apos;re building toward one goal: becoming the most trusted business growth partner for ambitious companies in the region.
+          <p className="text-2xl md:text-4xl font-serif text-corpex-black/80 leading-relaxed mb-16">
+            We&apos;re building toward one goal: becoming the most trusted business growth partner for ambitious companies in the region — <span className="font-bold text-corpex-blue">not the biggest consultancy, the most trusted one.</span>
           </p>
-          <div className="text-6xl md:text-[8rem] font-bold tracking-tighter leading-[0.9]">
-            <span className="text-corpex-white/30 block mb-4">NOT THE BIGGEST.</span>
-            <span className="text-corpex-gold block">THE MOST TRUSTED.</span>
-          </div>
+
+          <Link href="/contact" className="inline-flex items-center space-x-6 bg-corpex-gold text-corpex-black px-10 py-5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-corpex-blue hover:text-white transition-all duration-300">
+            <span>Work With Us</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </section>
 
-    </div>
+    </main>
   );
 }

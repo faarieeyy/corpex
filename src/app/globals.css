@@ -7,9 +7,9 @@
 
 @theme inline {
   --color-corpex-black: #111113;
-  --color-corpex-blue: #0945BA; /* Keeping blue just in case, but theme is white/gold */
+  --color-corpex-blue: #0945BA;
   --color-corpex-white: #FFFFFF;
-  --color-corpex-gold: #C09A3B;
+  --color-corpex-gold: #FFB800;
   
   --font-sans: var(--font-inter), sans-serif;
   --font-serif: var(--font-baskerville), serif;

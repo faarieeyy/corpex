@@ -14,6 +14,7 @@ const links = [
   { name: "Services", href: "/services" },
   { name: "Industries", href: "/industries" },
   { name: "Insights", href: "/insights" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -80,7 +81,7 @@ export default function Navbar() {
             <div className={clsx("flex items-baseline text-2xl tracking-tight transition-colors duration-300", 
               (isNavDark && !mobileMenuOpen) ? "text-corpex-white" : "text-corpex-black hover:text-corpex-gold"
             )}>
-              Corp<span className="font-bold">ex</span>
+              Corpex
               <div className="w-2 h-2 bg-corpex-gold rotate-45 ml-1 transition-transform group-hover:scale-150"></div>
             </div>
           </TransitionLink>
@@ -91,7 +92,8 @@ export default function Navbar() {
               <TransitionLink
                 key={link.name}
                 href={link.href}
-                className="text-xs font-bold uppercase tracking-widest text-corpex-white/70 hover:text-corpex-white transition-colors magnetic inline-block"
+                className="text-xs font-bold uppercase tracking-widest hover:text-white transition-colors magnetic inline-block"
+                style={{ color: '#FFB800' }}
               >
                 {link.name}
               </TransitionLink>
@@ -104,10 +106,8 @@ export default function Navbar() {
               <TransitionLink
                 key={link.name}
                 href={link.href}
-                className={clsx(
-                  "text-xs font-bold uppercase tracking-widest transition-colors magnetic inline-block",
-                  isDarkPage ? "text-corpex-white/70 hover:text-corpex-white" : "text-corpex-black/70 hover:text-corpex-black"
-                )}
+                className="text-xs font-bold uppercase tracking-widest hover:text-white transition-colors magnetic inline-block"
+                style={{ color: '#FFB800' }}
               >
                 {link.name}
               </TransitionLink>
